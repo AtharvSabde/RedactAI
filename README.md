@@ -189,7 +189,7 @@ Before installing RedactAI, ensure you have:
 
 ## 📦 Installation
 
-### 🚀 Quick Start (Recommended)
+### 🚀 Quick Start
 
 Choose your platform and run the automated installation:
 
@@ -200,7 +200,11 @@ curl -O https://raw.githubusercontent.com/AtharvSabde/RedactAI/main/setup.sh && 
 
 #### **Windows (PowerShell):**
 ```powershell
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/AtharvSabde/RedactAI/main/setup.ps1" -OutFile "setup.ps1"; .\setup.ps1
+# Download the script
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/AtharvSabde/RedactAI/main/setup.ps1" -OutFile "setup.ps1"
+
+# Run it
+powershell -ExecutionPolicy Bypass -File setup.ps1
 ```
 
 The automated script will:
@@ -217,9 +221,9 @@ The automated script will:
 
 ---
 
-### 📘 Detailed Installation
+### 📘 Detailed Installation 
 
-For manual installation, troubleshooting, or advanced configuration options, see:
+## For manual installation, troubleshooting, or advanced configuration options, see:
 
 👉 **[Complete Installation Guide (INSTALLATION.md)](INSTALLATION.md)**
 

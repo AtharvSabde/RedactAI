@@ -3,12 +3,7 @@
 
 $ErrorActionPreference = "Stop"
 
-Write-Host "==========================================" -ForegroundColor Cyan
-Write-Host "   RedactAI Automated Installation" -ForegroundColor Cyan
-Write-Host "==========================================" -ForegroundColor Cyan
-Write-Host ""
-
-# Helper functions
+# Helper functions - MUST BE DEFINED FIRST
 function Print-Success {
     param($Message)
     Write-Host "✓ $Message" -ForegroundColor Green
@@ -28,6 +23,12 @@ function Print-Warning {
     param($Message)
     Write-Host "⚠ $Message" -ForegroundColor Yellow
 }
+
+# Start installation
+Write-Host "==========================================" -ForegroundColor Cyan
+Write-Host "   RedactAI Automated Installation" -ForegroundColor Cyan
+Write-Host "==========================================" -ForegroundColor Cyan
+Write-Host ""
 
 # Check Python installation
 Print-Info "Checking Python installation..."

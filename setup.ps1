@@ -1,123 +1,111 @@
 # RedactAI Automated Installation Script
 # For Windows PowerShell
+# Run with: powershell -ExecutionPolicy Bypass -File setup.ps1
 
 $ErrorActionPreference = "Stop"
 
-# Helper functions - MUST BE DEFINED FIRST
-function Print-Success {
-    param($Message)
-    Write-Host "✓ $Message" -ForegroundColor Green
-}
-
-function Print-Error {
-    param($Message)
-    Write-Host "✗ $Message" -ForegroundColor Red
-}
-
-function Print-Info {
-    param($Message)
-    Write-Host "ℹ $Message" -ForegroundColor Blue
-}
-
-function Print-Warning {
-    param($Message)
-    Write-Host "⚠ $Message" -ForegroundColor Yellow
-}
-
-# Start installation
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host "   RedactAI Automated Installation" -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host ""
 
 # Check Python installation
-Print-Info "Checking Python installation..."
+Write-Host "ℹ Checking Python installation..." -ForegroundColor Blue
 try {
     $pythonVersion = python --version 2>&1
-    Print-Success "Found $pythonVersion"
+    Write-Host "✓ Found $pythonVersion" -ForegroundColor Green
 } catch {
-    Print-Error "Python is not installed or not in PATH"
-    Print-Info "Please install Python 3.8-3.12 from https://www.python.org"
+    Write-Host "✗ Python is not installed or not in PATH" -ForegroundColor Red
+    Write-Host "ℹ Please install Python 3.8-3.12 from https://www.python.org" -ForegroundColor Blue
+    Write-Host ""
+    Write-Host "Press any key to exit..."
+    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
     exit 1
 }
 
 # Check if git is installed
-Print-Info "Checking Git installation..."
+Write-Host "ℹ Checking Git installation..." -ForegroundColor Blue
 try {
     $gitVersion = git --version 2>&1
-    Print-Success "Found Git"
+    Write-Host "✓ Found Git" -ForegroundColor Green
 } catch {
-    Print-Error "Git is not installed"
-    Print-Info "Please install Git from https://git-scm.com/download/win"
+    Write-Host "✗ Git is not installed" -ForegroundColor Red
+    Write-Host "ℹ Please install Git from https://git-scm.com/download/win" -ForegroundColor Blue
+    Write-Host ""
+    Write-Host "Press any key to exit..."
+    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
     exit 1
 }
 
 # Clone repository
-Print-Info "Cloning RedactAI repository..."
+Write-Host "ℹ Cloning RedactAI repository..." -ForegroundColor Blue
 if (Test-Path "RedactAI") {
-    Print-Warning "RedactAI directory already exists. Using existing directory."
+    Write-Host "⚠ RedactAI directory already exists. Using existing directory." -ForegroundColor Yellow
     Set-Location RedactAI
     git pull origin main 2>&1 | Out-Null
 } else {
     git clone https://github.com/AtharvSabde/RedactAI.git 2>&1 | Out-Null
     Set-Location RedactAI
-    Print-Success "Repository cloned successfully"
+    Write-Host "✓ Repository cloned successfully" -ForegroundColor Green
 }
 
 # Create virtual environment
-Print-Info "Creating virtual environment..."
+Write-Host "ℹ Creating virtual environment..." -ForegroundColor Blue
 python -m venv venv
-Print-Success "Virtual environment created"
+Write-Host "✓ Virtual environment created" -ForegroundColor Green
 
 # Activate virtual environment
-Print-Info "Activating virtual environment..."
+Write-Host "ℹ Activating virtual environment..." -ForegroundColor Blue
 & .\venv\Scripts\Activate.ps1
-Print-Success "Virtual environment activated"
+Write-Host "✓ Virtual environment activated" -ForegroundColor Green
 
 # Upgrade pip
-Print-Info "Upgrading pip..."
+Write-Host "ℹ Upgrading pip..." -ForegroundColor Blue
 python -m pip install --upgrade pip --quiet
-Print-Success "Pip upgraded"
+Write-Host "✓ Pip upgraded" -ForegroundColor Green
 
 # Install dependencies
-Print-Info "Installing dependencies..."
+Write-Host "ℹ Installing dependencies..." -ForegroundColor Blue
 pip install -r requirements.txt --quiet
-Print-Success "Dependencies installed"
+Write-Host "✓ Dependencies installed" -ForegroundColor Green
 
 # Check Ollama installation
-Print-Info "Checking Ollama installation..."
+Write-Host "ℹ Checking Ollama installation..." -ForegroundColor Blue
 try {
     $ollamaVersion = ollama --version 2>&1
-    Print-Success "Ollama is installed"
+    Write-Host "✓ Ollama is installed" -ForegroundColor Green
     
     # Check if Ollama is running
     try {
         $response = Invoke-WebRequest -Uri "http://localhost:11434/api/tags" -UseBasicParsing -TimeoutSec 2
-        Print-Success "Ollama is running"
+        Write-Host "✓ Ollama is running" -ForegroundColor Green
     } catch {
-        Print-Warning "Ollama is not running"
-        Print-Info "Please start Ollama (it should start automatically on Windows)"
-        Print-Info "Check your system tray for the Ollama icon"
+        Write-Host "⚠ Ollama is not running" -ForegroundColor Yellow
+        Write-Host "ℹ Please start Ollama (it should start automatically on Windows)" -ForegroundColor Blue
+        Write-Host "ℹ Check your system tray for the Ollama icon" -ForegroundColor Blue
     }
 } catch {
-    Print-Error "Ollama is not installed"
-    Print-Info "Please install Ollama from: https://ollama.ai"
-    Print-Info "After installation, Ollama will start automatically"
+    Write-Host "✗ Ollama is not installed" -ForegroundColor Red
+    Write-Host "ℹ Please install Ollama from: https://ollama.ai" -ForegroundColor Blue
+    Write-Host "ℹ After installation, Ollama will start automatically" -ForegroundColor Blue
+    Write-Host ""
+    Write-Host "Press any key to exit..."
+    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
     exit 1
 }
 
 # Pull recommended model
-Print-Info "Checking for Ollama models..."
+Write-Host "ℹ Checking for Ollama models..." -ForegroundColor Blue
 $models = ollama list 2>&1
 if ($models -match "gemma3:4b") {
-    Print-Success "Model gemma3:4b already installed"
+    Write-Host "✓ Model gemma3:4b already installed" -ForegroundColor Green
 } else {
-    Print-Info "Pulling recommended model (gemma3:4b). This may take a few minutes..."
+    Write-Host "ℹ Pulling recommended model (gemma3:4b). This may take a few minutes..." -ForegroundColor Blue
     try {
         ollama pull gemma3:4b
-        Print-Success "Model gemma3:4b installed successfully"
+        Write-Host "✓ Model gemma3:4b installed successfully" -ForegroundColor Green
     } catch {
-        Print-Warning "Could not pull model. You can install it later with: ollama pull gemma3:4b"
+        Write-Host "⚠ Could not pull model. You can install it later with: ollama pull gemma3:4b" -ForegroundColor Yellow
     }
 }
 
@@ -130,12 +118,12 @@ $serverPath = Join-Path $currentDir "src\server.py"
 $pythonPathJson = $pythonPath -replace '\\', '/'
 $serverPathJson = $serverPath -replace '\\', '/'
 
-Print-Success "Installation paths determined:"
+Write-Host "✓ Installation paths determined:" -ForegroundColor Green
 Write-Host "  Python: $pythonPathJson"
 Write-Host "  Server: $serverPathJson"
 
 # Configure Claude Desktop
-Print-Info "Configuring Claude Desktop..."
+Write-Host "ℹ Configuring Claude Desktop..." -ForegroundColor Blue
 
 $configDir = Join-Path $env:APPDATA "Claude"
 $configFile = Join-Path $configDir "claude_desktop_config.json"
@@ -150,21 +138,21 @@ if (Test-Path $configFile) {
     $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
     $backupFile = "$configFile.backup.$timestamp"
     Copy-Item $configFile $backupFile
-    Print-Success "Backed up existing config to: $backupFile"
+    Write-Host "✓ Backed up existing config to: $backupFile" -ForegroundColor Green
 }
 
 # Create or update config
 if (Test-Path $configFile) {
     # Config exists, add our server
-    Print-Info "Updating existing Claude Desktop configuration..."
+    Write-Host "ℹ Updating existing Claude Desktop configuration..." -ForegroundColor Blue
     
     try {
         $config = Get-Content $configFile -Raw | ConvertFrom-Json
         
         # Check if pdf-redactor already exists
         if ($config.mcpServers.PSObject.Properties.Name -contains "pdf-redactor") {
-            Print-Warning "pdf-redactor entry already exists in config. Skipping update."
-            Print-Warning "To reconfigure, please edit manually: $configFile"
+            Write-Host "⚠ pdf-redactor entry already exists in config. Skipping update." -ForegroundColor Yellow
+            Write-Host "⚠ To reconfigure, please edit manually: $configFile" -ForegroundColor Yellow
         } else {
             # Add our server
             if (-not $config.mcpServers) {
@@ -177,16 +165,16 @@ if (Test-Path $configFile) {
             }
             
             $config | ConvertTo-Json -Depth 10 | Set-Content $configFile
-            Print-Success "Claude Desktop configuration updated"
+            Write-Host "✓ Claude Desktop configuration updated" -ForegroundColor Green
         }
     } catch {
-        Print-Error "Could not update configuration automatically"
-        Print-Info "Please update manually: $configFile"
+        Write-Host "✗ Could not update configuration automatically" -ForegroundColor Red
+        Write-Host "ℹ Please update manually: $configFile" -ForegroundColor Blue
         Write-Host $_.Exception.Message -ForegroundColor Red
     }
 } else {
     # Create new config
-    Print-Info "Creating new Claude Desktop configuration..."
+    Write-Host "ℹ Creating new Claude Desktop configuration..." -ForegroundColor Blue
     
     $config = @{
         mcpServers = @{
@@ -198,7 +186,7 @@ if (Test-Path $configFile) {
     }
     
     $config | ConvertTo-Json -Depth 10 | Set-Content $configFile
-    Print-Success "Claude Desktop configuration created"
+    Write-Host "✓ Claude Desktop configuration created" -ForegroundColor Green
 }
 
 Write-Host ""
@@ -206,7 +194,7 @@ Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host "   Installation Complete! 🎉" -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host ""
-Print-Success "RedactAI has been successfully installed and configured!"
+Write-Host "✓ RedactAI has been successfully installed and configured!" -ForegroundColor Green
 Write-Host ""
 Write-Host "Next steps:"
 Write-Host "  1. Restart Claude Desktop application"
@@ -216,7 +204,7 @@ Write-Host ""
 Write-Host "Configuration file location:"
 Write-Host "  $configFile"
 Write-Host ""
-Print-Info "For troubleshooting, see: https://github.com/AtharvSabde/RedactAI"
+Write-Host "ℹ For troubleshooting, see: https://github.com/AtharvSabde/RedactAI" -ForegroundColor Blue
 Write-Host ""
 Write-Host "Press any key to exit..."
 $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")

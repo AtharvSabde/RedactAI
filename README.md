@@ -175,7 +175,7 @@ Before installing RedactAI, ensure you have:
    # Fast model (recommended for getting started)
    ollama pull gemma3:1b
    
-   # Balanced model (recommended for production)
+   # Balanced model (recommended for balance)
    ollama pull gemma3:4b
    
    # Accurate model (for maximum precision)
@@ -418,50 +418,6 @@ Custom redaction with user-specified exclusions and additions.
 
 ---
 
-## 🔬 Technical Details
-
-### Progress Tracking
-Every operation includes detailed progress tracking with timestamps and elapsed time for each step:
-- Connection status
-- Text extraction
-- LLM analysis
-- Redaction application
-- File generation
-
-### JSON Schema Enforcement
-The LLM wrapper uses structured JSON schemas to ensure consistent output format, with fallback error recovery mechanisms. The system enforces a strict schema with all required PII categories.
-
-### Data Masking Strategy
-Sensitive data in reports is masked showing only first 2 and last 2 characters:
-- **General**: `Jo***oe` (John Doe)
-- **Emails**: Special handling - `jo***n@em***l.com` (john@email.com)
-- **Short values**: Fully masked with asterisks
-
-### Redaction Algorithm
-The system performs exact text matching across all pages:
-1. Searches for each sensitive value in the document
-2. Applies black redactions (`fill=(0, 0, 0)`) to the main document
-3. Creates yellow highlights (`stroke=[1, 1, 0]`) in the preview version
-4. Tracks statistics per page
-
-### Error Handling
-The system includes comprehensive error handling:
-- **Connection failures**: Validates Ollama connectivity before processing
-- **LLM timeouts**: 300-second timeout with clear error messages
-- **JSON parsing**: Multiple fallback strategies for malformed responses
-  - Direct JSON parse
-  - Markdown code block extraction
-  - Regex-based JSON extraction
-  - Common formatting fixes
-- **File operations**: Graceful handling of permission issues with temp directory fallback
-
-### Platform Support
-Auto-open functionality is cross-platform:
-- **Windows**: Uses `os.startfile()`
-- **macOS**: Uses `open` command
-- **Linux**: Uses `xdg-open` command
-
----
 
 ## 🐛 Troubleshooting
 

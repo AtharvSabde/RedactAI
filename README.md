@@ -171,6 +171,22 @@ Before installing RedactAI, ensure you have:
 
 ## 📦 Installation
 
+## Quick Start (Method 1)
+
+**Automated Installation:**
+
+macOS/Linux:
+```bash
+curl -O https://raw.githubusercontent.com/AtharvSabde/RedactAI/main/setup.sh && bash setup.sh
+```
+
+Windows (PowerShell):
+```powershell
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/AtharvSabde/RedactAI/main/setup.ps1" -OutFile "setup.ps1"; .\setup.ps1
+```
+
+##  manual installation instructions (Method 2)
+
 ### Step 1: Clone the Repository
 
 ```bash

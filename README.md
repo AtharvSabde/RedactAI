@@ -10,7 +10,21 @@
 
 ## 🤐 The Problem
 
-Tools like Claude or GPT are incredibly powerful, but they require raw input. If you're dealing with contracts, medical records, resumes, or internal documents, **that's risky**. Sensitive data like names, emails, phone numbers, addresses, and financial information could be exposed.
+Large Language Models are becoming a default tool for reviewing, summarizing, and extracting insights from documents. But there is a hidden cost.
+
+Most LLMs require raw document input. When you upload a contract, medical record, resume, or internal report, you are often sending unfiltered sensitive data along with it.
+
+This creates real risks:
+
+Personally identifiable information is exposed unintentionally
+
+Confidential or regulated data leaves your control
+
+Manual redaction is slow, error-prone, and inconsistent
+
+Existing redaction tools are either rule-based, cloud-only, or break document structure
+
+In practice, teams are forced to choose between using LLMs effectively and protecting privacy. That trade-off should not exist.
 
 ## 🛡️ The Solution
 
@@ -287,7 +301,7 @@ Choose the right model based on your needs:
 |-------|-----------|-------|----------|----------|
 | **gemma3:1b** | 1 Billion | ⚡ Fast (14s) | Basic | Quick scans, simple documents |
 | **gemma3:4b** | 4 Billion | ⚖️ Balanced (49s) | High | **Recommended** - Production use |
-| **gemma3:12b** | 12 Billion | 🐢 Slow (108s) | Highest | Maximum accuracy, complex documents |
+| **gemma3:12b** | 12 Billion | 🐢 Slow (108s) | Higher | Maximum accuracy, complex documents |
 
 ### Benchmark Results (2-page resume):
 
@@ -648,11 +662,6 @@ pip install -r requirements.txt
 python src/server.py
 ```
 
----
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 

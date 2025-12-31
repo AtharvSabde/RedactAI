@@ -42,8 +42,26 @@ Simply provide a PDF file path, and RedactAI will:
 
 ---
 
+
+---
+
+## 🎯 Why RedactAI?
+
+| Feature | RedactAI | Manual Redaction | Cloud Services |
+|---------|----------|------------------|----------------|
+| **Privacy** | ✅ 100% Local | ✅ Local | ❌ Data sent to cloud |
+| **Speed** | ✅ Seconds | ❌ Hours | ✅ Fast |
+| **Accuracy** | ✅ AI-Powered | ❌ Error-prone | ✅ AI-Powered |
+| **Cost** | ✅ Free | ⚠️ Time-consuming | ❌ Subscription fees |
+| **Customization** | ✅ Full control | ✅ Full control | ❌ Limited |
+| **Audit Trail** | ✅ Highlighted preview | ❌ Manual tracking | ⚠️ Varies |
+
+---
+
+
 ## 📋 Table of Contents
 
+- [Why RedactAI?](#-why-redactai)
 - [Features](#-features)
 - [Architecture](#-architecture)
 - [Prerequisites](#-prerequisites)
@@ -171,143 +189,49 @@ Before installing RedactAI, ensure you have:
 
 ## 📦 Installation
 
-## Quick Start (Method 1)
+### 🚀 Quick Start (Recommended)
 
-**Automated Installation:**
+Choose your platform and run the automated installation:
 
-macOS/Linux:
+#### **macOS/Linux:**
 ```bash
 curl -O https://raw.githubusercontent.com/AtharvSabde/RedactAI/main/setup.sh && bash setup.sh
 ```
 
-Windows (PowerShell):
+#### **Windows (PowerShell):**
 ```powershell
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/AtharvSabde/RedactAI/main/setup.ps1" -OutFile "setup.ps1"; .\setup.ps1
 ```
 
-##  manual installation instructions (Method 2)
+The automated script will:
+- ✅ Install all dependencies
+- ✅ Set up virtual environment
+- ✅ Configure Ollama and pull recommended model
+- ✅ Automatically configure Claude Desktop
+- ✅ Verify the installation
 
-### Step 1: Clone the Repository
-
-```bash
-git clone https://github.com/AtharvSabde/RedactAI.git
-cd RedactAI
-```
-
-### Step 2: Create a Virtual Environment
-
-```bash
-# Windows
-python -m venv venv
-venv\Scripts\activate
-
-# macOS/Linux
-python3 -m venv venv
-source venv/bin/activate
-```
-
-### Step 3: Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### Step 4: Verify Ollama Connection
-
-```bash
-# Make sure Ollama is running
-ollama serve
-
-# In another terminal, test it
-ollama list
-```
+**After installation completes:**
+1. Restart Claude Desktop
+2. Type in Claude: `List available Ollama models`
+3. If you see models listed, you're ready to go! 🎉
 
 ---
 
-## ⚙️ MCP Configuration
+### 📘 Detailed Installation
 
-To use RedactAI with Claude Desktop, you need to add it to your MCP configuration.
+For manual installation, troubleshooting, or advanced configuration options, see:
 
-### Step 1: Locate Your Config File
+👉 **[Complete Installation Guide (INSTALLATION.md)](INSTALLATION.md)**
 
-**Windows:**
-```
-%APPDATA%\Claude\claude_desktop_config.json
-```
-
-**macOS:**
-```
-~/Library/Application Support/Claude/claude_desktop_config.json
-```
-
-**Linux:**
-```
-~/.config/Claude/claude_desktop_config.json
-```
-
-### Step 2: Edit the Configuration
-
-Open `claude_desktop_config.json` and add the RedactAI server:
-
-```json
-{
-  "mcpServers": {
-    "pdf-redactor": {
-      "command": "/path/to/your/RedactAI/venv/Scripts/python.exe",
-      "args": [
-        "/path/to/your/RedactAI/src/server.py"
-      ]
-    }
-  }
-}
-```
-
-### Step 3: Update Paths
-
-**⚠️ IMPORTANT:** Replace the paths with your actual installation location.
-
-**Windows Example:**
-```json
-{
-  "mcpServers": {
-    "pdf-redactor": {
-      "command": "C:/Users/YourUsername/Desktop/RedactAI/venv/Scripts/python.exe",
-      "args": [
-        "C:/Users/YourUsername/Desktop/RedactAI/src/server.py"
-      ]
-    }
-  }
-}
-```
-
-**macOS/Linux Example:**
-```json
-{
-  "mcpServers": {
-    "pdf-redactor": {
-      "command": "/Users/YourUsername/RedactAI/venv/bin/python",
-      "args": [
-        "/Users/YourUsername/RedactAI/src/server.py"
-      ]
-    }
-  }
-}
-```
-
-### Step 4: Restart Claude Desktop
-
-Close and reopen Claude Desktop to load the new MCP server.
-
-### Step 5: Verify Installation
-
-In Claude, try:
-```
-List available Ollama models
-```
-
-If you see a list of models, RedactAI is successfully configured! 🎉
+The detailed guide includes:
+- Manual installation steps
+- Prerequisites checklist
+- Configuration helper scripts
+- Troubleshooting common issues
+- Platform-specific instructions
 
 ---
+
 
 ## 🎯 Model Selection
 
@@ -316,8 +240,8 @@ Choose the right model based on your needs:
 | Model | Parameters | Speed | Accuracy | Best For |
 |-------|-----------|-------|----------|----------|
 | **gemma3:1b** | 1 Billion | ⚡ Fast (14s) | Basic | Quick scans, simple documents |
-| **gemma3:4b** | 4 Billion | ⚖️ Balanced (49s) | High | **Recommended** - Production use |
-| **gemma3:12b** | 12 Billion | 🐢 Slow (108s) | Higher | Maximum accuracy, complex documents |
+| **gemma3:4b** | 4 Billion | ⚖️ Balanced (49s) | High | **Recommended** - balanced use |
+| **gemma3:12b** | 12 Billion | 🐢 Slow (108s) | Higher | better accuracy, complex documents |
 
 ### Benchmark Results (2-page resume):
 
@@ -628,16 +552,20 @@ ollama serve
 RedactAI/
 ├── src/
 │   ├── server.py              # Main MCP server (FastMCP)
-│   ├── tools/
-│   │   ├── ollama_llm.py      # Ollama LLM integration
-│   │   ├── pdf_extractor.py   # PDF text extraction
-│   │   ├── data_processor.py  # Sensitive data processing
-│   │   └── pdf_redactor.py    # PDF redaction logic
-│   └── __pycache__/
-├── venv/                       # Virtual environment
-├── .gitignore
+│   └── tools/
+│       ├── ollama_llm.py      # Ollama LLM integration
+│       ├── pdf_extractor.py   # PDF text extraction
+│       ├── data_processor.py  # Sensitive data processing
+│       └── pdf_redactor.py    # PDF redaction logic
+├── scripts/
+│   └── configure_claude.py    # Configuration helper script
+├── setup.sh                    # Automated setup (macOS/Linux)
+├── setup.ps1                   # Automated setup (Windows)
 ├── requirements.txt            # Python dependencies
-└── README.md                   # This file
+├── INSTALLATION.md             # Detailed installation guide
+├── README.md                   # This file
+├── LICENSE                     # MIT License
+└── .gitignore
 ```
 
 ---

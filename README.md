@@ -41,6 +41,10 @@ Simply provide a PDF file path, and RedactAI will:
 **Privacy First**: All processing happens locally with Ollama - your data never leaves your machine.
 
 ---
+## 🎥 Demo Video
+[![RedactAI Demo](https://img.youtube.com/vi/jeEh3x9aufQ/maxresdefault.jpg)](https://youtu.be/jeEh3x9aufQ)
+
+*[Click to watch the full demo on YouTube](https://youtu.be/jeEh3x9aufQ)*
 
 
 ---

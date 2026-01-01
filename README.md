@@ -3,7 +3,7 @@
 **Privacy firewall for your PDFs before sending to LLMs**
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 [![MCP](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
 
 ---
@@ -12,7 +12,7 @@
 
 Large Language Models are becoming a default tool for reviewing, summarizing, and extracting insights from documents. But there is a hidden cost.
 
-Most LLMs require raw document input. When you upload a contract, medical record, resume, or internal report, you are often sending unfiltered sensitive data along with it.
+Most LLMs require raw document input. When you upload a contract, medical record, financial, or internal report, you are often sending unfiltered sensitive data along with it.
 
 This creates real risks:
 

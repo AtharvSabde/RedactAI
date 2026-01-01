@@ -151,22 +151,18 @@ fi
 
 # Create or update config
 if [ -f "$CONFIG_FILE" ]; then
-    # Config exists, add our server
+    # Config exists, update it properly
     print_info "Updating existing Claude Desktop configuration..."
     
-    # Check if pdf-redactor already exists
-    if grep -q '"pdf-redactor"' "$CONFIG_FILE"; then
-        print_warning "pdf-redactor entry already exists in config. Skipping update."
-        print_warning "To reconfigure, please edit manually: $CONFIG_FILE"
-    else
-        # Use Python to safely update JSON
-        python3 << EOF
+    # Use Python to safely update JSON
+    python3 << 'EOF'
 import json
 import sys
+import os
 
-config_file = "$CONFIG_FILE"
-python_path = "$PYTHON_PATH"
-server_path = "$SERVER_PATH"
+config_file = os.environ.get('CONFIG_FILE')
+python_path = os.environ.get('PYTHON_PATH')
+server_path = os.environ.get('SERVER_PATH')
 
 try:
     with open(config_file, 'r') as f:
@@ -174,6 +170,10 @@ try:
     
     if 'mcpServers' not in config:
         config['mcpServers'] = {}
+    
+    # Check if pdf-redactor exists
+    if 'pdf-redactor' in config['mcpServers']:
+        print("WARNING: pdf-redactor entry already exists, overwriting...")
     
     config['mcpServers']['pdf-redactor'] = {
         'command': python_path,
@@ -183,18 +183,17 @@ try:
     with open(config_file, 'w') as f:
         json.dump(config, f, indent=2)
     
-    print("SUCCESS")
+    print("SUCCESS: Configuration updated")
 except Exception as e:
-    print(f"ERROR: {e}")
+    print(f"ERROR: {e}", file=sys.stderr)
     sys.exit(1)
 EOF
-        
-        if [ $? -eq 0 ]; then
-            print_success "Claude Desktop configuration updated"
-        else
-            print_error "Could not update configuration automatically"
-            print_info "Please update manually: $CONFIG_FILE"
-        fi
+    
+    if [ $? -eq 0 ]; then
+        print_success "Claude Desktop configuration updated"
+    else
+        print_error "Could not update configuration automatically"
+        print_info "Please update manually: $CONFIG_FILE"
     fi
 else
     # Create new config
